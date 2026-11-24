@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Partenaires financiers BYD, CFAO Mobility Côte d'Ivoire</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/style.css?v=20261124a">
+</head>
+<body>
+<div class="fictif">Données fictives : contacts, dossiers et échanges. Les établissements et leurs offres publiées sont réels, sources sur chaque fiche.</div>
+<header class="top">
+  <div class="wrap top-in">
+    <div class="logos">
+      <img src="assets/logo-cfao.png?v=20261124a" alt="CFAO Mobility" class="logo">
+      <span class="sep" aria-hidden="true"></span>
+      <img src="assets/logo-byd.png?v=20261124a" alt="BYD" class="logo-byd">
+    </div>
+    <div class="titre">
+      <h1>Partenaires financiers BYD</h1>
+      <p>Banques, crédit-bail et location longue durée qui financent les BYD en Côte d'Ivoire</p>
+    </div>
+    <div class="pret"><span class="pastille-ok"></span><span id="maj">À jour</span></div>
+  </div>
+</header>
+
+<nav class="onglets wrap" aria-label="Rubriques">
+  <button class="tab on" data-t="vue">Vue d'ensemble</button>
+  <button class="tab" data-t="financeurs">Financeurs</button>
+  <button class="tab" data-t="dossiers">Dossiers clients</button>
+  <button class="tab" data-t="echanges">Échanges et actions</button>
+  <button class="tab" data-t="newsletter">Newsletter</button>
+</nav>
+
+<main class="wrap">
+  <section class="kpis" id="kpis"></section>
+
+  <!-- Vue d'ensemble -->
+  <div class="panneau on" id="p-vue">
+    <section class="bloc alertes-bloc">
+      <div class="bloc-tete"><h2>Dossiers sans réponse depuis 5 jours</h2><span class="note">Relance à faire aujourd'hui</span></div>
+      <ol class="alertes" id="alertes"></ol>
+    </section>
+    <section class="bloc">
+      <div class="bloc-tete"><h2>Où en sont les dossiers</h2><span class="note">Du dépôt à la livraison du véhicule</span></div>
+      <div class="entonnoir" id="entonnoir"></div>
+    </section>
+    <div class="grille-2">
+      <section class="bloc">
+        <div class="bloc-tete"><h2>Délai moyen de réponse</h2><span class="note">Jours ouvrés, du dépôt à la décision</span></div>
+        <div class="chart-h"><canvas id="c-delai"></canvas></div>
+      </section>
+      <section class="bloc">
+        <div class="bloc-tete"><h2>Taux d'accord par financeur</h2><span class="note">Dossiers tranchés</span></div>
+        <div class="chart-h"><canvas id="c-accord"></canvas></div>
+      </section>
+    </div>
+    <section class="bloc">
+      <div class="bloc-tete"><h2>Classement des financeurs</h2><span class="note">Sur l'ensemble des dossiers suivis</span></div>
+      <div class="table-scroll"><table class="tab-data" id="classement"></table></div>
+    </section>
+  </div>
+
+  <!-- Financeurs -->
+  <div class="panneau" id="p-financeurs">
+    <div class="filtres" id="f-type"></div>
+    <div class="fiches" id="fiches"></div>
+  </div>
+
+  <!-- Dossiers -->
+  <div class="panneau" id="p-dossiers">
+    <div class="filtres" id="f-fin"></div>
+    <div class="kanban" id="kanban"></div>
+  </div>
+
+  <!-- Échanges -->
+  <div class="panneau" id="p-echanges">
+    <section class="bloc">
+      <div class="bloc-tete"><h2>Prochaine action par financeur</h2><span class="note">Classées par échéance</span></div>
+      <div class="actions" id="actions"></div>
+    </section>
+    <section class="bloc">
+      <div class="bloc-tete"><h2>Historique des échanges</h2><span class="note" id="nb-echanges"></span></div>
+      <div class="filtres" id="f-ech"></div>
+      <ol class="fil" id="fil"></ol>
+    </section>
+  </div>
+
+  <!-- Newsletter -->
+  <div class="panneau" id="p-newsletter">
+    <section class="bloc nl-tete">
+      <div>
+        <span class="aa-lib">Dernier envoi</span>
+        <h2 id="nl-titre"></h2>
+        <p class="note" id="nl-date"></p>
+      </div>
+      <a class="bouton" id="nl-lien" href="#" target="_blank" rel="noopener">Voir la newsletter
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    </section>
+    <div class="nl-kpis" id="nl-kpis"></div>
+    <div class="grille-2">
+      <section class="bloc">
+        <div class="bloc-tete"><h2>Lecture par financeur</h2><span class="note">Contacts ayant ouvert</span></div>
+        <div class="chart-h"><canvas id="c-nl"></canvas></div>
+      </section>
+      <section class="bloc">
+        <div class="bloc-tete"><h2>À relancer en priorité</h2><span class="note">Reçue mais pas ouverte</span></div>
+        <ul class="liste-simple" id="nl-relance"></ul>
+      </section>
+    </div>
+    <section class="bloc">
+      <div class="bloc-tete"><h2>Qui l'a reçue, ouverte, a répondu</h2></div>
+      <div class="table-scroll"><table class="tab-data" id="nl-table"></table></div>
+    </section>
+  </div>
+</main>
+
+<footer class="pied">
+  <div class="wrap pied-in">
+    <span><strong>Données fictives</strong> pour les contacts, dossiers, échanges et le suivi de la newsletter.</span>
+    <span>Conditions publiées à confirmer auprès de chaque établissement.</span>
+  </div>
+</footer>
+<script src="assets/chart.umd.min.js?v=20261124a"></script>
+<script src="data/donnees.js?v=20261124a"></script>
+<script src="assets/app.js?v=20261124a"></script>
+</body>
+</html>
