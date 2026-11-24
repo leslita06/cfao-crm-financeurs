@@ -15,7 +15,7 @@ a{color:var(--bleu)}
 .top-in{display:flex;align-items:center;gap:22px;padding:16px 20px}
 .logos{display:flex;align-items:center;gap:16px;flex:none}
 .logo{height:42px;width:auto}
-.logo-byd{height:22px;width:auto}
+.logo-byd{height:26px;width:auto}
 .sep{width:1px;height:34px;background:var(--filet)}
 .titre{flex:1;border-left:1px solid var(--filet);padding-left:22px;min-width:0}
 .titre h1{font-size:24px;color:var(--bleu);font-weight:700}
@@ -141,7 +141,7 @@ main{padding:14px 0 30px}
  .top-in{flex-wrap:wrap;gap:12px;padding:14px}
  .titre{border-left:0;padding-left:0;flex-basis:100%}
  .titre h1{font-size:20px}
- .logo{height:34px}.logo-byd{height:18px}
+ .logo{height:34px}.logo-byd{height:21px}
  .pret{order:3}
  .kpis{grid-template-columns:1fr 1fr;gap:10px}
  .kpi{padding:12px 13px}

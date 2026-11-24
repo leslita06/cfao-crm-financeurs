@@ -57,13 +57,14 @@
   const tr = dos.filter(d => d.reponse), okAll = tr.filter(d => d.statut !== 'Refusé');
   const alertes = dos.filter(d => d.retard).sort((a, b) => b.attente - a.attente);
   const delaiG = Math.round(10 * tr.reduce((a, d) => a + ouvres(dte(d.depot), dte(d.reponse)), 0) / tr.length) / 10;
+  const accTot = D.financeurs.reduce((a, f) => a + stat[f.id].accords, 0), decTot = D.financeurs.reduce((a, f) => a + stat[f.id].tranches, 0);
   const actifs = D.financeurs.filter(f => stat[f.id].n > 0).length;
 
   // KPI
   const K = [
     ['banque', 'Financeurs suivis', D.financeurs.length, actifs + ' avec des dossiers en cours ou passés', ''],
     ['dossier', 'Dossiers en cours', dos.filter(d => !d.reponse).length, 'sur ' + dos.length + ' dossiers BYD suivis', ''],
-    ['check', "Taux d'accord", Math.round(100 * okAll.length / tr.length) + ' %', okAll.length + ' accords sur ' + tr.length + ' décisions', 'noir'],
+    ['check', "Taux d'accord", Math.round(100 * accTot / decTot) + ' %', accTot + ' accords sur ' + decTot + ' décisions', 'noir'],
     ['horloge', 'Délai moyen', String(delaiG).replace('.', ',') + ' j', 'jours ouvrés jusqu\'à la décision', ''],
     ['alerte', 'Sans réponse 5 j', alertes.length, alertes.length ? 'dossiers à relancer' : 'aucun dossier en attente', 'rouge']
   ];
@@ -88,14 +89,25 @@
   // graphes
   Chart.defaults.font.family = 'Inter, sans-serif'; Chart.defaults.color = '#6B6B78';
   const fins = D.financeurs.filter(f => stat[f.id].tranches > 0);
+  // valeur écrite au bout de chaque barre : le graphe se lit sans l'axe et concorde avec le tableau
+  const valeurs = { id: 'valeurs', afterDatasetsDraw(ch) {
+    const sfx = ch.options.suffixe; if (!sfx) return;
+    const c = ch.ctx; c.save(); c.font = '600 12px Inter, sans-serif'; c.fillStyle = '#1F2233'; c.textBaseline = 'middle';
+    ch.getDatasetMeta(0).data.forEach((b, i) => {
+      const t = String(ch.data.datasets[0].data[i]).replace('.', ',') + sfx, w = c.measureText(t).width;
+      const dedans = b.x + w + 8 > ch.chartArea.right;
+      c.fillStyle = dedans ? '#fff' : '#1F2233'; c.textAlign = dedans ? 'right' : 'left';
+      c.fillText(t, dedans ? b.x - 8 : b.x + 6, b.y);
+    }); c.restore(); } };
   const opts = (suffix, max) => ({
+    suffixe: suffix, animation: false,
     indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + String(c.raw).replace('.', ',') + suffix } } },
     scales: { x: { beginAtZero: true, max, grid: { color: '#EEF1F5' }, ticks: { callback: v => v + suffix } }, y: { grid: { display: false }, ticks: { font: { weight: 600 }, color: '#1F2233' } } }
   });
   const parDelai = fins.slice().sort((a, b) => stat[a.id].delai - stat[b.id].delai);
-  new Chart(document.getElementById('c-delai'), { type: 'bar', data: { labels: parDelai.map(f => f.court), datasets: [{ data: parDelai.map(f => stat[f.id].delai), backgroundColor: parDelai.map(f => stat[f.id].delai > 10 ? '#B54708' : '#00438D'), borderRadius: 6, barThickness: 18 }] }, options: opts(' j') });
+  new Chart(document.getElementById('c-delai'), { type: 'bar', data: { labels: parDelai.map(f => f.court), datasets: [{ data: parDelai.map(f => stat[f.id].delai), backgroundColor: parDelai.map(f => stat[f.id].delai > 10 ? '#B54708' : '#00438D'), borderRadius: 6, barThickness: 18 }] }, options: opts(' j'), plugins: [valeurs] });
   const parTaux = fins.slice().sort((a, b) => stat[b.id].taux - stat[a.id].taux);
-  new Chart(document.getElementById('c-accord'), { type: 'bar', data: { labels: parTaux.map(f => f.court), datasets: [{ data: parTaux.map(f => stat[f.id].taux), backgroundColor: parTaux.map(f => stat[f.id].taux < 60 ? '#B42318' : '#067647'), borderRadius: 6, barThickness: 18 }] }, options: opts(' %', 100) });
+  new Chart(document.getElementById('c-accord'), { type: 'bar', data: { labels: parTaux.map(f => f.court), datasets: [{ data: parTaux.map(f => stat[f.id].taux), backgroundColor: parTaux.map(f => stat[f.id].taux < 60 ? '#B42318' : '#067647'), borderRadius: 6, barThickness: 18 }] }, options: opts(' %', 100), plugins: [valeurs] });
 
   // classement
   const cl = D.financeurs.slice().sort((a, b) => stat[b.id].montant - stat[a.id].montant);
